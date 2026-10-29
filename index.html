@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Bestie! 💗</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Efek animasi -->
+  <canvas id="confetti"></canvas>
+  <div id="hearts" aria-hidden="true"></div>
+
+  <div class="sparkles">✦ ♡ ✧ ♡ ✦</div>
+
+  <main class="card">
+    <p class="eyebrow">A LITTLE SURPRISE FOR YOU</p>
+
+    <div class="cake">🎂</div>
+
+    <h1>Happy Birthday,<br><span>Bestie!</span> 💗</h1>
+
+    <p class="intro">
+      Hari spesial untuk orang yang spesial.
+      Semoga semua hal baik selalu menemukan jalan menuju kamu.
+    </p>
+
+    <button id="surpriseBtn" class="surprise-btn">
+      Buka surat kecil 💌
+    </button>
+
+    <section id="letter" class="letter hidden">
+      <h2>Dear Bestie, 🫶</h2>
+
+      <p>
+        Selamat ulang tahun! Terima kasih sudah menjadi bagian
+        dari cerita-cerita kecil yang akhirnya jadi kenangan besar.
+        Semoga kamu selalu diberi kesehatan, kebahagiaan,
+        dimudahkan semua urusannya, dan dikelilingi orang-orang
+        yang tulus menyayangimu.
+      </p>
+
+      <p>
+        Jangan lupa bahagia, tetap jadi diri sendiri, dan semoga
+        satu per satu impianmu bisa terwujud. Apa pun yang terjadi,
+        semoga hari-harimu ke depan dipenuhi hal-hal baik.
+        Love you, bestie! 💕
+      </p>
+
+      <p class="sign">With love, your bestie ♡</p>
+    </section>
+
+    <div class="music-box">
+      <div>
+        <strong>🎵 Lagu kenangan kita</strong>
+        <p>Putar lagu sambil melihat kenangan kita.</p>
+      </div>
+
+      <audio controls loop preload="metadata">
+        <source src="long-live.mp3.mpeg" type="audio/mpeg">
+        Browser kamu belum mendukung pemutar audio.
+      </audio>
+    </div>
+
+    <h2 class="gallery-title">Our little memories 📸</h2>
+    <p class="gallery-subtitle">
+      Kumpulan momen yang selalu layak dikenang.
+    </p>
+
+    <div class="gallery">
+      <figure>
+        <img src="foto1.jpg.jpeg" alt="Kenangan bersama 1">
+        <figcaption>little moments ♡</figcaption>
+      </figure>
+
+      <figure>
+        <img src="foto2.jpg.jpeg" alt="Kenangan bersama 2">
+        <figcaption>good times ✨</figcaption>
+      </figure>
+
+      <figure>
+        <img src="foto3.jpg.jpeg" alt="Kenangan bersama 3">
+        <figcaption>my favorite people 💗</figcaption>
+      </figure>
+
+      <figure>
+        <img src="foto4.jpg.jpeg" alt="Kenangan bersama 4">
+        <figcaption>memories forever</figcaption>
+      </figure>
+
+      <figure>
+        <img src="foto5.jpg.jpeg" alt="Kenangan bersama 5">
+        <figcaption>always a story to tell</figcaption>
+      </figure>
+
+      <figure>
+        <img src="foto6.jpg.jpeg" alt="Kenangan bersama 6">
+        <figcaption>bestie moments 🌷</figcaption>
+      </figure>
+
+      <figure>
+        <img src="foto7.jpg.jpeg" alt="Kenangan bersama 7">
+        <figcaption>more memories to come 💕</figcaption>
+      </figure>
+    </div>
+
+    <footer>Made with ♡ just for you · Keep shining!</footer>
+  </main>
+
+  <script>
+    // ===== SURAT KEJUTAN =====
+    const button = document.getElementById("surpriseBtn");
+    const letter = document.getElementById("letter");
+
+    button.addEventListener("click", () => {
+      letter.classList.toggle("hidden");
+
+      const isOpen = !letter.classList.contains("hidden");
+
+      button.textContent = isOpen
+        ? "Tutup surat 💗"
+        : "Buka surat kecil 💌";
+
+      if (isOpen) {
+        confettiBurst();
+        letter.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+    });
+
+    // ===== CONFETTI WARNA-WARNI =====
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+
+    let pieces = [];
+    let animationRunning = false;
+
+    const colors = [
+      "#ff5caa", "#ffd166", "#b69cff",
+      "#79e5c3", "#ff8b8b", "#ffffff"
+    ];
+
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function confettiBurst() {
+      // Sebaran confetti dari bagian atas layar
+      for (let i = 0; i < 180; i++) {
+        pieces.push({
+          x: Math.random() * window.innerWidth,
+          y: -20 - Math.random() * window.innerHeight * 0.5,
+          size: Math.random() * 7 + 3,
+          speed: Math.random() * 3 + 1.5,
+          drift: (Math.random() - 0.5) * 3,
+          rotation: Math.random() * 6,
+          spin: (Math.random() - 0.5) * 0.15,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+
+      if (!animationRunning) {
+        animationRunning = true;
+        animateConfetti();
+      }
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      pieces.forEach(p => {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+        ctx.restore();
+
+        p.y += p.speed;
+        p.x += p.drift;
+        p.rotation += p.spin;
+      });
+
+      pieces = pieces.filter(p => p.y < window.innerHeight + 30);
+
+      if (pieces.length > 0) {
+        requestAnimationFrame(animateConfetti);
+      } else {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        animationRunning = false;
+      }
+    }
+
+    // Confetti saat halaman dibuka
+    window.addEventListener("load", () => {
+      setTimeout(confettiBurst, 500);
+    });
+
+    // ===== HATI MELAYANG =====
+    const hearts = document.getElementById("hearts");
+    const heartSymbols = ["💗", "💕", "💖", "♡", "✨"];
+
+    function createHeart() {
+      const heart = document.createElement("span");
+
+      heart.className = "floating-heart";
+      heart.textContent =
+        heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (5 + Math.random() * 4) + "s";
+      heart.style.fontSize = (14 + Math.random() * 15) + "px";
+
+      hearts.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 9500);
+    }
+
+    setInterval(createHeart, 650);
+
+    // ===== ANIMASI FOTO SAAT DI-SCROLL =====
+    const photos = document.querySelectorAll(".gallery figure");
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show-photo");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      photos.forEach(photo => observer.observe(photo));
+    } else {
+      photos.forEach(photo => photo.classList.add("show-photo"));
+    }
+  </script>
+
+</body>
+</html>
